@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoyo en Uno Pro Shop · Tu tienda de golf</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Palos, ropa, calzado y accesorios de golf en Barquisimeto, La Cumaca, Paso Largo y pronto Caracas. Pide por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* =====================================================================
+   HOYO EN UNO PRO SHOP · FASE 1 (WEB VITRINA) · MAQUETA
+   ---------------------------------------------------------------------
+   CÓMO CAMBIAR LA MARCA CUANDO LLEGUEN LOGO Y COLORES:
+   1) Colores: edita SOLO las variables --brand ... --glow de :root.
+   2) Logo: reemplaza el <svg> dentro de cada .logo por <img src="logo.svg">.
+   3) Tipografías: --f-display (títulos) y --f-body (texto).
+   4) WhatsApp: números por tienda en el objeto TIENDAS (abajo, en <script>).
+   5) Fotos: cada imagen usa la función de Unsplash; cámbialas por las reales.
+   ===================================================================== */
+:root{
+  /* Paleta provisional "Salvia & Arena" (suave) */
+  --brand:#2E5A44;      /* verde principal (botones, acentos fuertes) */
+  --brand-2:#8DB59B;    /* verde salvia (detalles) */
+  --accent:#C9B27C;     /* arena / dorado suave */
+  --bg:#F6F4EE;         /* fondo crema */
+  --surface:#FFFFFF;
+  --ink:#16231C;        /* texto principal */
+  --muted:#5F6E65;
+  --line:rgba(22,35,28,.12);
+  --night:#0F1A15;      /* secciones oscuras */
+  --night-2:#16251E;
+  --glow:rgba(141,181,155,.35);
+  --wa:#25D366;
+
+  --f-display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --f-body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --r:22px; --r-sm:14px;
+  --shadow:0 20px 60px -20px rgba(15,26,21,.35);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+/* Paletas de prueba (solo para la maqueta) */
+:root[data-palette="arena"]{--brand:#7A6A45;--brand-2:#C9B27C;--accent:#5E8C74;--bg:#F7F2E7;--glow:rgba(201,178,124,.35)}
+:root[data-palette="noche"]{--brand:#1E3A5F;--brand-2:#7FA7C9;--accent:#C9B27C;--bg:#F2F4F6;--night:#0C1420;--night-2:#132033;--glow:rgba(127,167,201,.35)}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{width:min(1240px,100% - 40px);margin-inline:auto}
+.serif{font-family:var(--f-display);font-weight:600;letter-spacing:-.01em;line-height:1.02}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor;opacity:.6}
+.section{padding:110px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:48px;flex-wrap:wrap}
+.section-head h2{font-size:clamp(40px,5vw,68px);margin-top:14px;max-width:14ch}
+.section-head p{max-width:420px;color:var(--muted)}
+em.it{font-style:italic;color:var(--brand)}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;font-weight:700;font-size:14.5px;letter-spacing:.01em;transition:transform .3s var(--ease),background .3s,box-shadow .3s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--brand);color:#fff;box-shadow:0 10px 30px -10px var(--brand)}
+.btn-glass{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn-wa{background:var(--wa);color:#073B1E}
+.btn-line{border:1px solid var(--line);background:var(--surface)}
+.btn svg{width:18px;height:18px}
+
+/* Barra superior */
+.topbar{background:var(--night);color:#E8EFEA;font-size:13px}
+.topbar .wrap{display:flex;justify-content:center;gap:10px;align-items:center;padding:9px 0;text-align:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 0 var(--glow);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.topbar a{text-decoration:underline;text-underline-offset:3px}
+
+/* Cabecera */
+header.nav{position:sticky;top:0;z-index:50;transition:background .4s,box-shadow .4s}
+header.nav.scrolled{background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:78px;gap:20px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo svg{width:46px;height:46px;flex:none}
+.logo b{display:block;font-family:var(--f-display);font-size:22px;line-height:1;font-weight:700}
+.logo small{font-family:var(--f-mono);font-size:10px;letter-spacing:.22em;color:var(--muted)}
+.menu{display:flex;gap:30px;font-weight:600;font-size:14.5px}
+.menu a{position:relative;padding:6px 0}
+.menu a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;background:var(--brand);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.menu a:hover::after{transform:scaleX(1)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:var(--surface)}
+.icon-btn svg{width:18px;height:18px}
+.burger{display:none}
+
+/* Héroe */
+.hero{position:relative;margin-top:-78px;min-height:100svh;display:flex;align-items:flex-end;color:#fff;overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:zoom 18s var(--ease) forwards}
+@keyframes zoom{to{transform:scale(1)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,20,15,.55) 0%,rgba(10,20,15,.05) 35%,rgba(10,20,15,.75) 100%)}
+.hero .grid-lines{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:80px 80px;mask-image:linear-gradient(180deg,transparent,#000 60%,transparent)}
+.hero .wrap{padding:180px 0 70px;display:grid;grid-template-columns:1.4fr .9fr;gap:40px;align-items:end}
+.hero .eyebrow{color:#fff}
+.hero h1{font-size:clamp(54px,8.4vw,128px);margin:20px 0 22px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p.lead{font-size:18px;max-width:520px;color:rgba(255,255,255,.86)}
+.hero .ctas{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.hud{background:rgba(15,26,21,.38);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:var(--r);padding:24px;font-size:14px}
+.hud-head{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.15)}
+.hud ul{list-style:none}
+.hud li{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+.hud li:last-child{border-bottom:0;padding-bottom:0}
+.hud li span{font-family:var(--f-mono);font-size:11px;color:rgba(255,255,255,.6)}
+.tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.14);white-space:nowrap}
+.tag.on{background:var(--brand-2);color:var(--night)}
+.tag.soon{background:var(--accent);color:var(--night)}
+.scroll-cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--f-mono);font-size:10px;letter-spacing:.3em;color:rgba(255,255,255,.6)}
+
+/* Marquesina */
+.marquee{background:var(--night);color:#DCE6DF;overflow:hidden;padding:22px 0;border-block:1px solid rgba(255,255,255,.06)}
+.marquee-track{display:flex;gap:56px;width:max-content;animation:slide 38s linear infinite}
+.marquee span{font-family:var(--f-display);font-size:28px;font-style:italic;white-space:nowrap;display:flex;align-items:center;gap:56px}
+.marquee span::after{content:"✦";font-style:normal;font-size:14px;color:var(--accent)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* Categorías */
+.cats{display:grid;grid-template-columns:1.2fr 1fr 1fr;grid-template-rows:280px 280px;gap:18px}
+.cat{position:relative;border-radius:var(--r);overflow:hidden;color:#fff;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;padding:26px}
+.cat:first-child{grid-row:span 2}
+.cat img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.2s var(--ease)}
+.cat::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 35%,rgba(10,20,15,.8))}
+.cat:hover img{transform:scale(1.07)}
+.cat .num{position:absolute;top:22px;left:26px;font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;opacity:.8}
+.cat h3{font-family:var(--f-display);font-size:40px;font-weight:600;line-height:1}
+.cat p{font-size:14px;opacity:.85;margin-top:6px}
+.cat .go{position:absolute;top:18px;right:18px;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);transition:transform .4s var(--ease),background .4s}
+.cat:hover .go{transform:rotate(-45deg);background:var(--accent)}
+.cat .go svg{width:18px;height:18px}
+
+/* Catálogo */
+.toolbar{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;transition:all .3s}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.store-pick{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.store-pick select{font:inherit;padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;transition:transform .5s var(--ease),box-shadow .5s}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.card .ph{position:relative;aspect-ratio:4/4.4;overflow:hidden;background:#E8ECE6}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease)}
+.card:hover .ph img{transform:scale(1.06)}
+.card .badge{position:absolute;top:14px;left:14px;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.85);backdrop-filter:blur(8px);padding:5px 10px;border-radius:999px;color:var(--ink)}
+.card .badge.new{background:var(--brand);color:#fff}
+.card .body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card .brand{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.card h4{font-size:16px;font-weight:700;line-height:1.3}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:14px;gap:10px}
+.price{font-family:var(--f-display);font-size:26px;font-weight:700}
+.price small{font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:600;margin-right:3px}
+.wa-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:var(--wa);color:#073B1E;font-weight:700;font-size:13px;transition:transform .3s var(--ease)}
+.wa-btn:hover{transform:scale(1.05)}
+.wa-btn svg{width:16px;height:16px}
+.note{font-size:13px;color:var(--muted);margin-top:22px;text-align:center}
+
+/* Cómo pedir */
+.steps-sec{background:var(--night);color:#E8EFEA;position:relative;overflow:hidden}
+.steps-sec::before{content:"";position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 65%);top:-300px;right:-200px}
+.steps-sec .eyebrow{color:var(--brand-2)}
+.steps-sec .section-head p{color:rgba(232,239,234,.7)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;position:relative}
+.step{border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:34px 28px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.01));backdrop-filter:blur(6px)}
+.step .n{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.2em}
+.step h3{font-family:var(--f-display);font-size:34px;font-weight:600;margin:40px 0 10px;line-height:1.05}
+.step p{color:rgba(232,239,234,.72);font-size:15px}
+.step .ico{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.08);margin-top:18px;border:1px solid rgba(255,255,255,.12)}
+.step .ico svg{width:24px;height:24px;color:var(--brand-2)}
+
+/* Tiendas */
+.stores{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.store{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.store .ph{position:relative;aspect-ratio:4/3.4;overflow:hidden}
+.store .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.store:hover .ph img{transform:scale(1.06)}
+.store .ph .tag{position:absolute;top:14px;left:14px;backdrop-filter:blur(8px)}
+.store .ph .tag:not(.on):not(.soon){background:rgba(15,26,21,.6);color:#fff}
+.store.future .ph img{filter:grayscale(.85) contrast(1.05)}
+.store .coord{position:absolute;bottom:12px;right:14px;font-family:var(--f-mono);font-size:10px;color:#fff;opacity:.85;letter-spacing:.06em}
+.store .body{padding:22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.store h3{font-family:var(--f-display);font-size:30px;font-weight:600;line-height:1}
+.store .meta{font-size:14px;color:var(--muted);display:grid;gap:6px}
+.store .meta div{display:flex;gap:10px}
+.store .meta svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--brand)}
+.store .actions{display:flex;gap:8px;margin-top:auto;padding-top:8px}
+.store .actions a{flex:1;justify-content:center;padding:11px 12px;font-size:13px}
+
+/* Destacado Paso Largo */
+.spot{border-radius:32px;overflow:hidden;position:relative;color:#fff;isolation:isolate;min-height:520px;display:flex;align-items:center}
+.spot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.spot::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(10,20,15,.85) 0%,rgba(10,20,15,.35) 60%,transparent)}
+.spot .in{padding:60px;max-width:640px}
+.spot h2{font-size:clamp(44px,5.6vw,80px);margin:16px 0}
+.spot .eyebrow{color:var(--accent)}
+.count{display:flex;gap:12px;margin:28px 0}
+.count div{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:16px;padding:14px 18px;min-width:84px;text-align:center}
+.count b{display:block;font-family:var(--f-display);font-size:40px;line-height:1}
+.count span{font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;opacity:.75}
+
+/* Torneos */
+.events{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
+.event-feature{position:relative;border-radius:var(--r);overflow:hidden;color:#fff;min-height:460px;display:flex;align-items:flex-end;padding:30px;isolation:isolate}
+.event-feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.event-feature::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 30%,rgba(10,20,15,.85))}
+.event-feature h3{font-family:var(--f-display);font-size:42px;font-weight:600;line-height:1;margin:10px 0}
+.event-list{display:flex;flex-direction:column}
+.ev{display:grid;grid-template-columns:86px 1fr auto;gap:20px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line)}
+.ev:first-child{border-top:1px solid var(--line)}
+.ev .date{font-family:var(--f-display);text-align:center;line-height:1}
+.ev .date b{display:block;font-size:46px;font-weight:600}
+.ev .date span{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;color:var(--muted)}
+.ev h4{font-size:18px;font-weight:700}
+.ev p{font-size:14px;color:var(--muted)}
+.ev .arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:all .3s}
+.ev:hover .arrow{background:var(--brand);color:#fff;border-color:var(--brand)}
+.ev .arrow svg{width:16px;height:16px}
+
+/* Marcas */
+.brands{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.brands div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);height:110px;display:grid;place-items:center;font-family:var(--f-display);font-size:22px;font-weight:700;color:var(--muted);letter-spacing:.02em;transition:color .3s,background .3s}
+.brands div:hover{color:var(--ink);background:var(--surface)}
+
+/* Instagram */
+.ig{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.ig a{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden}
+.ig img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.ig a:hover img{transform:scale(1.08)}
+.ig a::after{content:"";position:absolute;inset:0;background:var(--brand);opacity:0;transition:opacity .4s;mix-blend-mode:multiply}
+.ig a:hover::after{opacity:.35}
+
+/* Nosotros */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+.about .stack{position:relative;height:560px}
+.about .stack img{position:absolute;border-radius:var(--r);object-fit:cover;box-shadow:var(--shadow)}
+.about .stack img:nth-child(1){width:70%;height:82%;top:0;left:0}
+.about .stack img:nth-child(2){width:52%;height:52%;right:0;bottom:0;border:8px solid var(--bg)}
+.about h2{font-size:clamp(40px,4.6vw,64px);margin:16px 0 22px}
+.about p{color:var(--muted);margin-bottom:16px;max-width:520px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+.stats div{border-top:1px solid var(--line);padding-top:16px}
+.stats b{font-family:var(--f-display);font-size:52px;font-weight:600;line-height:1;display:block;color:var(--brand)}
+.stats span{font-size:13px;color:var(--muted)}
+
+/* CTA + pie */
+.cta{background:var(--brand);color:#fff;border-radius:32px;padding:70px 60px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center;position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;border:1px solid rgba(255,255,255,.18);box-shadow:0 0 0 60px rgba(255,255,255,.04),0 0 0 120px rgba(255,255,255,.03)}
+.cta h2{font-size:clamp(40px,4.6vw,64px)}
+.cta p{opacity:.85;margin-top:12px}
+.cta .btns{display:flex;flex-direction:column;gap:12px;position:relative;z-index:1}
+.cta .btns a{justify-content:space-between}
+footer{background:var(--night);color:#C9D4CD;margin-top:110px;padding:80px 0 30px;font-size:14px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:50px;border-bottom:1px solid rgba(255,255,255,.08)}
+.foot h5{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brand-2);margin-bottom:16px;font-weight:500}
+.foot ul{list-style:none;display:grid;gap:10px}
+.foot a:hover{color:#fff}
+.foot .logo b{color:#fff}
+.foot .logo small{color:#8FA197}
+.foot p{margin-top:18px;max-width:320px;color:#93A49A}
+.social{display:flex;gap:10px;margin-top:20px}
+.social a{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center}
+.social svg{width:18px;height:18px}
+.legal{display:flex;justify-content:space-between;padding-top:24px;font-size:12.5px;color:#7F9086;flex-wrap:wrap;gap:10px}
+.big-word{font-family:var(--f-display);font-size:clamp(70px,15vw,230px);font-weight:600;line-height:.85;color:rgba(255,255,255,.05);text-align:center;margin-top:30px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden}
+
+/* WhatsApp flotante */
+.wa-float{position:fixed;right:22px;bottom:22px;z-index:60;display:flex;align-items:center;gap:10px;background:var(--wa);color:#073B1E;padding:14px 20px 14px 16px;border-radius:999px;font-weight:800;box-shadow:0 14px 40px -10px rgba(37,211,102,.7)}
+.wa-float svg{width:24px;height:24px}
+
+/* Panel de paleta (solo maqueta) */
+body.preview .palette,body.preview .wa-float{display:none}
+.palette{position:fixed;left:22px;bottom:22px;z-index:60;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:12px 14px;font-size:12px;box-shadow:var(--shadow)}
+.palette b{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.palette .sw{display:flex;gap:8px}
+.palette button{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.palette button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+
+/* Revelado al hacer scroll */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* Responsive */
+@media (max-width:1080px){
+  .products{grid-template-columns:repeat(3,1fr)}
+  .stores{grid-template-columns:repeat(2,1fr)}
+  .brands{grid-template-columns:repeat(3,1fr)}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .menu{display:none}.burger{display:grid}
+  .hero .wrap{grid-template-columns:1fr}
+  .cats{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,230px)}
+  .cat:first-child{grid-column:span 2;grid-row:auto}
+  .products{grid-template-columns:repeat(2,1fr)}
+  .steps,.events,.about,.cta{grid-template-columns:1fr}
+  .ig{grid-template-columns:repeat(3,1fr)}
+  .about .stack{height:420px}
+  .section{padding:80px 0}
+  .spot .in{padding:36px}
+  .cta{padding:44px 30px}
+  .palette{display:none}
+}
+@media (max-width:560px){
+  .products,.stores{grid-template-columns:1fr}
+  .nav-actions .btn{display:none}
+  .wa-float span{display:none}
+  .wa-float{padding:14px}
+  .foot{grid-template-columns:1fr}
+  .card .row{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M5 8h14l-1 12H6zM9 8a3 3 0 0 1 6 0"/></symbol>
+  <!-- LOGO PROVISIONAL: reemplazar por el logo real -->
+  <symbol id="logo" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="30" fill="var(--brand)"/>
+    <circle cx="32" cy="32" r="25" fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 3"/>
+    <path d="M29 16v26" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30 16l12 4.5-12 4.5z" fill="var(--accent)"/>
+    <ellipse cx="32" cy="44" rx="11" ry="3.2" fill="none" stroke="#fff" stroke-width="1.6"/>
+    <circle cx="38" cy="40" r="2.6" fill="#fff"/>
+  </symbol>
+</svg>
+
+<div class="topbar"><div class="wrap"><i class="dot"></i> Nueva tienda en <b>Paso Largo Glamping &amp; Golf Club</b>, Miranda · Apertura noviembre 2026 · <a href="#paso-largo">Conócela</a></div></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Hoyo en Uno Pro Shop">
+      <svg><use href="#logo"/></svg>
+      <div><b>Hoyo en Uno</b><small>PRO SHOP · TU TIENDA DE GOLF</small></div>
+    </a>
+    <nav class="menu" aria-label="Principal">
+      <a href="#catalogo">Catálogo</a><a href="#tiendas">Tiendas</a><a href="#torneos">Torneos</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" aria-label="Buscar"><svg><use href="#i-search"/></svg></button>
+      <a class="btn btn-primary" href="#contacto"><svg><use href="#i-wa"/></svg>Escríbenos</a>
+      <button class="icon-btn burger" aria-label="Menú"><svg><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- 1. HÉROE -->
+<section class="hero">
+  <div class="hero-bg"><img src="https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=2000&q=75&auto=format&fit=crop" alt="Golfista ejecutando un swing con driver"></div>
+  <div class="grid-lines"></div>
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Pro Shop · Venezuela</span>
+      <h1 class="serif">Del tee <em>al green</em>,<br>todo tu golf.</h1>
+      <p class="lead">Palos, ropa, calzado y accesorios de las mejores marcas, con asesoría de quienes juegan. Elige en línea y pide por WhatsApp a tu tienda más cercana.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#catalogo">Ver catálogo <svg><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-glass" href="#tiendas">Nuestras tiendas</a>
+      </div>
+    </div>
+    <aside class="hud reveal" aria-label="Estado de las tiendas">
+      <div class="hud-head"><span>Tiendas</span><span>Estado</span></div>
+      <ul>
+        <li><div>Barquisimeto Golf Club<br><span>LARA</span></div><b class="tag on">Abierta</b></li>
+        <li><div>La Cumaca Golf Club<br><span>CARABOBO</span></div><b class="tag on">Abierta</b></li>
+        <li><div>Paso Largo Glamping &amp; Golf<br><span>MIRANDA</span></div><b class="tag soon">Nov 2026</b></li>
+        <li><div>Caracas<br><span>DISTRITO CAPITAL</span></div><b class="tag">2027</b></li>
+      </ul>
+    </aside>
+  </div>
+  <div class="scroll-cue">DESLIZA</div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="marquee-track">
+  <span>Palos</span><span>Ropa</span><span>Calzado</span><span>Accesorios</span><span>Bolsas</span><span>Asesoría experta</span><span>Torneos</span>
+  <span>Palos</span><span>Ropa</span><span>Calzado</span><span>Accesorios</span><span>Bolsas</span><span>Asesoría experta</span><span>Torneos</span>
+</div></div>
+
+<!-- 2. CATEGORÍAS -->
+<section class="section" id="categorias">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Categorías</span><h2 class="serif">Equípate para <em class="it">cada golpe</em></h2></div>
+      <p>Cuatro mundos, una sola tienda. Explora por categoría y encuentra lo que necesitas para tu próxima ronda.</p>
+    </div>
+    <div class="cats">
+      <a class="cat reveal" href="#catalogo" data-f="palos"><img src="https://images.unsplash.com/photo-1595827432953-7161e19e303e?w=1200&q=70&auto=format&fit=crop" alt="Palos y pelotas de golf en exhibición"><span class="num">01</span><span class="go"><svg><use href="#i-arrow"/></svg></span><h3>Palos</h3><p>Drivers, maderas, híbridos, hierros, wedges y putters</p></a>
+      <a class="cat reveal" href="#catalogo" data-f="ropa"><img src="https://images.unsplash.com/photo-1591491640784-3232eb748d4b?w=900&q=70&auto=format&fit=crop" alt="Golfista con ropa deportiva"><span class="num">02</span><span class="go"><svg><use href="#i-arrow"/></svg></span><h3>Ropa</h3><p>Polos, pantalones, faldas y capas</p></a>
+      <a class="cat reveal" href="#catalogo" data-f="calzado"><img src="https://images.unsplash.com/photo-1767978362890-fa67c004b57a?w=900&q=70&auto=format&fit=crop" alt="Zapatos de golf blancos sobre el césped"><span class="num">03</span><span class="go"><svg><use href="#i-arrow"/></svg></span><h3>Calzado</h3><p>Con y sin tacos, para él y para ella</p></a>
+      <a class="cat reveal" href="#catalogo" data-f="accesorios"><img src="https://images.unsplash.com/photo-1788940571579-20be2657fc5e?w=900&q=70&auto=format&fit=crop" alt="Mano con guante de golf sosteniendo una pelota"><span class="num">04</span><span class="go"><svg><use href="#i-arrow"/></svg></span><h3>Accesorios</h3><p>Guantes, pelotas, bolsas, gorras y más</p></a>
+      <a class="cat reveal" href="#catalogo" data-f="accesorios"><img src="https://images.unsplash.com/photo-1675106643681-da7ad12e926f?w=900&q=70&auto=format&fit=crop" alt="Bolsa de palos de golf"><span class="num">05</span><span class="go"><svg><use href="#i-arrow"/></svg></span><h3>Bolsas</h3><p>De trípode, de carro y de viaje</p></a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CATÁLOGO -->
+<section class="section" id="catalogo" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Catálogo</span><h2 class="serif">Lo más <em class="it">pedido</em></h2></div>
+      <p>Precios de referencia. Elige tu tienda y toca “Pedir” para enviar el producto directo a su WhatsApp.</p>
+    </div>
+    <div class="toolbar reveal">
+      <div class="chips" role="group" aria-label="Filtrar por categoría">
+        <button class="chip" data-filter="todo" aria-pressed="true">Todo</button>
+        <button class="chip" data-filter="palos" aria-pressed="false">Palos</button>
+        <button class="chip" data-filter="ropa" aria-pressed="false">Ropa</button>
+        <button class="chip" data-filter="calzado" aria-pressed="false">Calzado</button>
+        <button class="chip" data-filter="accesorios" aria-pressed="false">Accesorios</button>
+      </div>
+      <label class="store-pick">Pedir a:
+        <select id="store"></select>
+      </label>
+    </div>
+    <div class="products" id="products"></div>
+    <p class="note">Productos, marcas y precios de ejemplo. Se reemplazan con la lista real del cliente.</p>
+  </div>
+</section>
+
+<!-- 4. CÓMO PEDIR -->
+<section class="section steps-sec">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Cómo pedir</span><h2 class="serif">Tres pasos, <em class="it" style="color:var(--accent)">cero filas</em></h2></div>
+      <p>Mientras llega la tienda en línea (fase 2), cada pedido se cierra por WhatsApp con un asesor real.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><span class="n">PASO 01</span><div class="ico"><svg><use href="#i-grid"/></svg></div><h3>Elige en el catálogo</h3><p>Filtra por categoría y compara modelos, tallas y precios de referencia.</p></div>
+      <div class="step reveal"><span class="n">PASO 02</span><div class="ico"><svg><use href="#i-chat"/></svg></div><h3>Pide por WhatsApp</h3><p>El mensaje sale escrito con el producto y la tienda. Un asesor confirma disponibilidad y precio.</p></div>
+      <div class="step reveal"><span class="n">PASO 03</span><div class="ico"><svg><use href="#i-bag"/></svg></div><h3>Retira o recibe</h3><p>Paga como prefieras y retira en tu club o coordina el envío.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. TIENDAS -->
+<section class="section" id="tiendas">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Tiendas</span><h2 class="serif">Estamos donde <em class="it">juegas</em></h2></div>
+      <p>Tiendas dentro de los mejores clubes del país. Dirección, horario y WhatsApp directo de cada una.</p>
+    </div>
+    <div class="stores" id="stores"></div>
+  </div>
+</section>
+
+<!-- 6. PASO LARGO -->
+<section class="wrap reveal" id="paso-largo">
+  <div class="spot">
+    <img src="https://images.unsplash.com/photo-1605144884374-ecbb643615f6?w=2000&q=70&auto=format&fit=crop" alt="Vista aérea de un campo de golf">
+    <div class="in">
+      <span class="eyebrow">Nueva apertura · Miranda</span>
+      <h2 class="serif">Paso Largo<br><em style="font-style:italic;color:var(--accent)">Glamping &amp; Golf</em></h2>
+      <p style="opacity:.85;max-width:460px">Nuestra tercera tienda abre sus puertas en noviembre de 2026. Ven a conocerla y aprovecha las ofertas de inauguración.</p>
+      <div class="count" id="count"><div><b>--</b><span>DÍAS</span></div><div><b>--</b><span>HORAS</span></div><div><b>--</b><span>MIN</span></div></div>
+      <a class="btn btn-wa" href="#" data-wa="paso"><svg><use href="#i-wa"/></svg>Avísame de la apertura</a>
+    </div>
+  </div>
+</section>
+
+<!-- 7. TORNEOS -->
+<section class="section" id="torneos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Torneos y eventos</span><h2 class="serif">La comunidad <em class="it">en juego</em></h2></div>
+      <p>Torneos patrocinados, clínicas y lanzamientos en nuestros clubes. Inscríbete por WhatsApp.</p>
+    </div>
+    <div class="events">
+      <div class="event-feature reveal">
+        <img src="https://images.unsplash.com/photo-1766206096984-5b13b0f1eedd?w=1400&q=70&auto=format&fit=crop" alt="Público observando a un golfista durante un torneo">
+        <div><span class="tag soon">Próximo torneo</span><h3>Copa Hoyo en Uno 2026</h3><p style="opacity:.85">Barquisimeto Golf Club · Fecha por confirmar</p></div>
+      </div>
+      <div class="event-list reveal">
+        <a class="ev" href="#"><div class="date"><b>22</b><span>NOV</span></div><div><h4>Inauguración Paso Largo</h4><p>Paso Largo Glamping &amp; Golf Club · Miranda</p></div><span class="arrow"><svg><use href="#i-arrow"/></svg></span></a>
+        <a class="ev" href="#"><div class="date"><b>06</b><span>DIC</span></div><div><h4>Clínica de putting</h4><p>La Cumaca Golf Club · Con instructor invitado</p></div><span class="arrow"><svg><use href="#i-arrow"/></svg></span></a>
+        <a class="ev" href="#"><div class="date"><b>13</b><span>DIC</span></div><div><h4>Demo day: drivers 2027</h4><p>Barquisimeto Golf Club · Prueba antes de comprar</p></div><span class="arrow"><svg><use href="#i-arrow"/></svg></span></a>
+        <a class="ev" href="#"><div class="date"><b>17</b><span>ENE</span></div><div><h4>Torneo de parejas</h4><p>La Cumaca Golf Club · Cupos limitados</p></div><span class="arrow"><svg><use href="#i-arrow"/></svg></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. MARCAS -->
+<section class="wrap reveal" aria-label="Marcas">
+  <span class="eyebrow" style="margin-bottom:24px">Marcas que trabajamos (ejemplo)</span>
+  <div class="brands"><div>Marca 01</div><div>Marca 02</div><div>Marca 03</div><div>Marca 04</div><div>Marca 05</div><div>Marca 06</div></div>
+</section>
+
+<!-- 9. NOSOTROS -->
+<section class="section" id="nosotros">
+  <div class="wrap about">
+    <div class="stack reveal">
+      <img src="https://images.unsplash.com/photo-1776717163992-1919b844d715?w=1000&q=70&auto=format&fit=crop" alt="Vista aérea de un campo de golf">
+      <img src="https://images.unsplash.com/photo-1763002032476-511cab02e34c?w=800&q=70&auto=format&fit=crop" alt="Putters y pelotas sobre el green">
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Nosotros</span>
+      <h2 class="serif">Golfistas atendiendo a <em class="it">golfistas</em></h2>
+      <p>Hoyo en Uno Pro Shop nace dentro de los clubes de golf de Venezuela. Conocemos el juego, las canchas y lo que cada jugador necesita para mejorar.</p>
+      <p>Te ayudamos a elegir el palo correcto, la talla justa y el accesorio que te falta, en persona o por WhatsApp.</p>
+      <div class="stats">
+        <div><b data-n="4">0</b><span>tiendas para 2027</span></div>
+        <div><b data-n="3">0</b><span>estados del país</span></div>
+        <div><b data-n="500" data-plus>0</b><span>productos en catálogo (ej.)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. INSTAGRAM -->
+<section class="wrap reveal" aria-label="Instagram">
+  <div class="section-head" style="margin-bottom:28px">
+    <div><span class="eyebrow">Instagram</span><h2 class="serif" style="font-size:clamp(34px,4vw,52px)">@hoyoenunoproshop</h2></div>
+    <a class="btn btn-line" href="#"><svg><use href="#i-ig"/></svg>Síguenos</a>
+  </div>
+  <div class="ig">
+    <a href="#"><img src="https://images.unsplash.com/photo-1632946269126-0f8edbe8b068?w=500&q=65&auto=format&fit=crop" alt=""></a>
+    <a href="#"><img src="https://images.unsplash.com/photo-1593282153762-a41e3cceb06c?w=500&q=65&auto=format&fit=crop" alt=""></a>
+    <a href="#"><img src="https://images.unsplash.com/photo-1574252757301-440c0cc8951f?w=500&q=65&auto=format&fit=crop" alt=""></a>
+    <a href="#"><img src="https://images.unsplash.com/photo-1763917379121-91130139aca0?w=500&q=65&auto=format&fit=crop" alt=""></a>
+    <a href="#"><img src="https://images.unsplash.com/photo-1780396236681-90ae15b28548?w=500&q=65&auto=format&fit=crop" alt=""></a>
+    <a href="#"><img src="https://images.unsplash.com/photo-1761315307561-e2ec45a2bb8a?w=500&q=65&auto=format&fit=crop" alt=""></a>
+  </div>
+</section>
+
+<!-- 11. CONTACTO -->
+<section class="wrap reveal" id="contacto" style="margin-top:110px">
+  <div class="cta">
+    <div>
+      <span class="eyebrow" style="color:var(--accent)">Contacto</span>
+      <h2 class="serif" style="margin-top:14px">¿Buscas algo <em style="font-style:italic;color:var(--accent)">específico</em>?</h2>
+      <p>Escríbele directo a la tienda que prefieras. Te respondemos en horario de tienda.</p>
+    </div>
+    <div class="btns" id="cta-btns"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#"><svg><use href="#logo"/></svg><div><b>Hoyo en Uno</b><small>PRO SHOP · TU TIENDA DE GOLF</small></div></a>
+        <p>Tu tienda de golf en Barquisimeto, La Cumaca, Paso Largo y, en 2027, Caracas.</p>
+        <div class="social"><a href="#" aria-label="Instagram"><svg><use href="#i-ig"/></svg></a><a href="#" aria-label="WhatsApp"><svg><use href="#i-wa"/></svg></a></div>
+      </div>
+      <div><h5>Tienda</h5><ul><li><a href="#catalogo">Palos</a></li><li><a href="#catalogo">Ropa</a></li><li><a href="#catalogo">Calzado</a></li><li><a href="#catalogo">Accesorios</a></li></ul></div>
+      <div><h5>Tiendas</h5><ul><li>Barquisimeto Golf Club</li><li>La Cumaca Golf Club</li><li>Paso Largo (nov 2026)</li><li>Caracas (2027)</li></ul></div>
+      <div><h5>Ayuda</h5><ul><li><a href="#">Cómo pedir</a></li><li><a href="#">Formas de pago</a></li><li><a href="#">Cambios y garantías</a></li><li><a href="#torneos">Torneos</a></li></ul></div>
+    </div>
+    <div class="legal"><span>© 2026 Hoyo en Uno Pro Shop. Todos los derechos reservados.</span><span>Maqueta fase 1 · Fotos de muestra (Unsplash)</span></div>
+    <div class="big-word">Hoyo en Uno</div>
+  </div>
+</footer>
+
+<a class="wa-float" href="#" data-wa="main" aria-label="Escríbenos por WhatsApp"><svg><use href="#i-wa"/></svg><span>¿Te ayudamos?</span></a>
+
+<div class="palette" aria-label="Probar paletas">
+  <b>Paleta provisional</b>
+  <div class="sw">
+    <button data-p="" aria-pressed="true" title="Salvia & Arena" style="background:linear-gradient(135deg,#2E5A44 50%,#C9B27C 50%)"></button>
+    <button data-p="arena" aria-pressed="false" title="Arena & Bosque" style="background:linear-gradient(135deg,#7A6A45 50%,#5E8C74 50%)"></button>
+    <button data-p="noche" aria-pressed="false" title="Azul club" style="background:linear-gradient(135deg,#1E3A5F 50%,#C9B27C 50%)"></button>
+  </div>
+</div>
+
+<script>
+if (location.search.includes("preview")) document.body.classList.add("preview");
+/* ===== DATOS EDITABLES ===== */
+const U = (id, w=900) => `https://images.unsplash.com/photo-${id}?w=${w}&q=70&auto=format&fit=crop`;
+
+const TIENDAS = [
+  {id:"bqto", nombre:"Barquisimeto Golf Club", estado:"Lara", estatus:"Abierta", clase:"on",
+   dir:"Barquisimeto Golf Club, Barquisimeto, Lara (dirección exacta por confirmar)", horario:"Mar a dom · 8:00 am – 6:00 pm (por confirmar)",
+   wa:"580000000001", foto:U("1538648759472-7251f7cb2c2f"), coord:"10.07° N · 69.32° O"},
+  {id:"cumaca", nombre:"La Cumaca Golf Club", estado:"Carabobo", estatus:"Abierta", clase:"on",
+   dir:"La Cumaca Golf Club, San Diego, Carabobo (por confirmar)", horario:"Mar a dom · 8:00 am – 6:00 pm (por confirmar)",
+   wa:"580000000002", foto:U("1500932334442-8761ee4810a7"), coord:"10.25° N · 67.95° O"},
+  {id:"paso", nombre:"Paso Largo Glamping & Golf", estado:"Miranda", estatus:"Nov 2026", clase:"soon",
+   dir:"Paso Largo Glamping & Golf Club, Miranda", horario:"Abre en noviembre de 2026",
+   wa:"580000000003", foto:U("1757874905852-ea4596dd221a"), coord:"MIRANDA · VE"},
+  {id:"ccs", nombre:"Caracas", estado:"Distrito Capital", estatus:"2027", clase:"", futura:true,
+   dir:"Ubicación por anunciar", horario:"Próximamente en 2027",
+   wa:"", foto:U("1705637841133-2fd5b3c4512b"), coord:"CARACAS · VE"}
+];
+
+const PRODUCTOS = [
+  {cat:"palos", marca:"Marca ejemplo", nombre:"Driver titanio 460cc · 10.5°", precio:349, foto:U("1627307887011-8a5029b6adcb"), badge:"Nuevo"},
+  {cat:"palos", marca:"Marca ejemplo", nombre:"Set de hierros 5–PW · varilla acero", precio:899, foto:U("1530028828-25e8270793c5")},
+  {cat:"palos", marca:"Marca ejemplo", nombre:"Putter blade · 34\"", precio:229, foto:U("1763002032476-511cab02e34c")},
+  {cat:"calzado", marca:"Marca ejemplo", nombre:"Zapato de golf sin tacos · blanco", precio:139, foto:U("1793249095200-b5ec8e8f0b3a"), badge:"Top"},
+  {cat:"ropa", marca:"Marca ejemplo", nombre:"Polo dry-fit · hombre", precio:59, foto:U("1591491640784-3232eb748d4b")},
+  {cat:"ropa", marca:"Marca ejemplo", nombre:"Conjunto deportivo · mujer", precio:89, foto:U("1780396236681-90ae15b28548"), badge:"Nuevo"},
+  {cat:"accesorios", marca:"Marca ejemplo", nombre:"Pelotas tour · caja x12", precio:54, foto:U("1562204320-31975a5e09ce")},
+  {cat:"accesorios", marca:"Marca ejemplo", nombre:"Bolsa de trípode · 14 divisiones", precio:249, foto:U("1574252757301-440c0cc8951f")},
+];
+
+/* ===== LÓGICA ===== */
+const $ = s => document.querySelector(s);
+const waIcon = '<svg><use href="#i-wa"/></svg>';
+const waLink = (num, txt) => `https://wa.me/${num}?text=${encodeURIComponent(txt)}`;
+const abiertas = TIENDAS.filter(t => t.wa);
+
+$("#store").innerHTML = abiertas.map(t => `<option value="${t.id}">${t.nombre}</option>`).join("");
+const tiendaSel = () => TIENDAS.find(t => t.id === $("#store").value);
+
+function pintarProductos(f="todo"){
+  $("#products").innerHTML = PRODUCTOS.filter(p => f==="todo" || p.cat===f).map((p,i) => `
+    <article class="card reveal in" style="transition-delay:${i*60}ms">
+      <div class="ph"><img loading="lazy" src="${p.foto}" alt="${p.nombre}">${p.badge?`<span class="badge ${p.badge==='Nuevo'?'new':''}">${p.badge}</span>`:""}</div>
+      <div class="body">
+        <span class="brand">${p.marca}</span>
+        <h4>${p.nombre}</h4>
+        <div class="row">
+          <span class="price"><small>USD</small>${p.precio}</span>
+          <a class="wa-btn" target="_blank" rel="noopener" data-prod="${p.nombre}" href="#">${waIcon}Pedir</a>
+        </div>
+      </div>
+    </article>`).join("");
+  actualizarLinks();
+}
+function actualizarLinks(){
+  const t = tiendaSel();
+  document.querySelectorAll("[data-prod]").forEach(a => {
+    a.href = waLink(t.wa, `Hola ${t.nombre}, me interesa: ${a.dataset.prod}. ¿Tienen disponibilidad?`);
+  });
+}
+$("#store").addEventListener("change", actualizarLinks);
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x===c));
+  pintarProductos(c.dataset.filter);
+}));
+document.querySelectorAll(".cat").forEach(c => c.addEventListener("click", () => {
+  const chip = document.querySelector(`.chip[data-filter="${c.dataset.f}"]`); if (chip) chip.click();
+}));
+pintarProductos();
+
+$("#stores").innerHTML = TIENDAS.map(t => `
+  <article class="store reveal ${t.futura?'future':''}">
+    <div class="ph"><img loading="lazy" src="${t.foto}" alt="${t.nombre}"><span class="tag ${t.clase}">${t.estatus}</span><span class="coord">${t.coord}</span></div>
+    <div class="body">
+      <span class="eyebrow">${t.estado}</span>
+      <h3>${t.nombre}</h3>
+      <div class="meta">
+        <div><svg><use href="#i-pin"/></svg><span>${t.dir}</span></div>
+        <div><svg><use href="#i-clock"/></svg><span>${t.horario}</span></div>
+      </div>
+      <div class="actions">
+        ${t.wa ? `<a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(t.wa,`Hola ${t.nombre}, quisiera información.`)}">${waIcon}WhatsApp</a>
+                  <a class="btn btn-line" target="_blank" rel="noopener" href="https://maps.google.com/?q=${encodeURIComponent(t.nombre)}">Cómo llegar</a>`
+               : `<span class="btn btn-line" style="flex:1;justify-content:center;opacity:.7">Muy pronto</span>`}
+      </div>
+    </div>
+  </article>`).join("");
+
+$("#cta-btns").innerHTML = abiertas.map(t => `<a class="btn btn-glass" target="_blank" rel="noopener" href="${waLink(t.wa,`Hola ${t.nombre}, estoy buscando...`)}"><span style="display:flex;gap:10px;align-items:center">${waIcon}${t.nombre}</span><svg><use href="#i-arrow"/></svg></a>`).join("");
+document.querySelectorAll("[data-wa]").forEach(a => {
+  const t = a.dataset.wa==="paso" ? TIENDAS[2] : TIENDAS[0];
+  a.href = waLink(t.wa, a.dataset.wa==="paso" ? "Hola, quiero que me avisen de la apertura de Paso Largo." : "Hola Hoyo en Uno, necesito ayuda.");
+  a.target = "_blank"; a.rel = "noopener";
+});
+
+/* Cuenta regresiva a la apertura de Paso Largo (fecha de ejemplo) */
+const apertura = new Date("2026-11-22T09:00:00-04:00");
+function tick(){
+  const d = Math.max(0, apertura - new Date());
+  const b = document.querySelectorAll("#count b");
+  b[0].textContent = String(Math.floor(d/864e5)).padStart(2,"0");
+  b[1].textContent = String(Math.floor(d/36e5)%24).padStart(2,"0");
+  b[2].textContent = String(Math.floor(d/6e4)%60).padStart(2,"0");
+}
+tick(); setInterval(tick, 30000);
+
+/* Cabecera con vidrio al hacer scroll */
+const nav = $("#nav");
+addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 40), {passive:true});
+
+/* Revelado + contadores */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add("in");
+  e.target.querySelectorAll("[data-n]").forEach(el => {
+    const n = +el.dataset.n, t0 = performance.now();
+    const step = t => { const k = Math.min(1,(t-t0)/1400); el.textContent = Math.round(n*(1-Math.pow(1-k,3))) + (el.hasAttribute("data-plus") && k===1 ? "+" : ""); if(k<1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+  io.unobserve(e.target);
+}), {threshold:.12});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* Selector de paleta (solo maqueta) */
+document.querySelectorAll(".palette button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".palette button").forEach(x => x.setAttribute("aria-pressed", x===b));
+  if (b.dataset.p) document.documentElement.dataset.palette = b.dataset.p; else delete document.documentElement.dataset.palette;
+}));
+</script>
+</body>
+</html>

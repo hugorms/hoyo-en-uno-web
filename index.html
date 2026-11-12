@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hoyo en Uno Pro Shop · Tu tienda de golf</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Palos, ropa, calzado y accesorios de golf en Barquisimeto, La Cumaca, Paso Largo y pronto Caracas. Pide por WhatsApp.">
@@ -49,7 +49,8 @@
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html,body{overflow-x:clip}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
@@ -75,7 +76,11 @@ em.it{font-style:italic;color:var(--brand)}
 
 /* Barra superior */
 .topbar{background:var(--night);color:#E8EFEA;font-size:13px}
-.topbar .wrap{display:flex;justify-content:center;gap:10px;align-items:center;padding:9px 0;text-align:center}
+.topbar .wrap{display:block;padding:9px 0;text-align:center}
+.topbar .dot{display:inline-block;vertical-align:middle;margin-right:8px}
+header.nav:not(.scrolled) .logo b{color:#fff}
+header.nav:not(.scrolled) .logo small{color:rgba(255,255,255,.72)}
+header.nav:not(.scrolled) .menu a{color:#fff}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--brand-2);box-shadow:0 0 0 0 var(--glow);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 10px transparent}100%{box-shadow:0 0 0 0 transparent}}
 .topbar a{text-decoration:underline;text-underline-offset:3px}
@@ -274,7 +279,7 @@ footer{background:var(--night);color:#C9D4CD;margin-top:110px;padding:80px 0 30p
 .social a{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center}
 .social svg{width:18px;height:18px}
 .legal{display:flex;justify-content:space-between;padding-top:24px;font-size:12.5px;color:#7F9086;flex-wrap:wrap;gap:10px}
-.big-word{font-family:var(--f-display);font-size:clamp(70px,15vw,230px);font-weight:600;line-height:.85;color:rgba(255,255,255,.05);text-align:center;margin-top:30px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden}
+.big-word{font-family:var(--f-display);font-size:clamp(40px,15vw,230px);font-weight:600;line-height:.85;color:rgba(255,255,255,.05);text-align:center;margin-top:30px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden}
 
 /* WhatsApp flotante */
 .wa-float{position:fixed;right:22px;bottom:22px;z-index:60;display:flex;align-items:center;gap:10px;background:var(--wa);color:#073B1E;padding:14px 20px 14px 16px;border-radius:999px;font-weight:800;box-shadow:0 14px 40px -10px rgba(37,211,102,.7)}
@@ -300,27 +305,116 @@ body.preview .palette,body.preview .wa-float{display:none}
   .brands{grid-template-columns:repeat(3,1fr)}
   .foot{grid-template-columns:1fr 1fr}
 }
+/* Menú móvil */
+.mnav{position:fixed;inset:0;z-index:70;background:color-mix(in srgb,var(--night) 96%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#fff;display:flex;flex-direction:column;padding:24px 24px calc(28px + env(safe-area-inset-bottom));opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s}
+.mnav.open{opacity:1;visibility:visible}
+.mnav .top{display:flex;justify-content:space-between;align-items:center}
+.mnav .top b{font-family:var(--f-display);font-size:24px}
+.mnav .icon-btn{background:transparent;border-color:rgba(255,255,255,.25);color:#fff;font-size:22px;line-height:1}
+.mnav nav{display:flex;flex-direction:column;margin-top:40px}
+.mnav nav a{font-family:var(--f-display);font-size:40px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.mnav .btn{margin-top:auto;justify-content:center}
+body.lock{overflow:hidden}
+
 @media (max-width:860px){
   .menu{display:none}.burger{display:grid}
-  .hero .wrap{grid-template-columns:1fr}
-  .cats{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,230px)}
+  .hero .wrap{grid-template-columns:1fr;padding:150px 0 60px}
+  .hero::before{background:linear-gradient(180deg,rgba(10,20,15,.55) 0%,rgba(10,20,15,.35) 40%,rgba(10,20,15,.85) 100%)}
+  .cats{grid-template-columns:1fr 1fr;grid-template-rows:260px 200px 200px}
   .cat:first-child{grid-column:span 2;grid-row:auto}
   .products{grid-template-columns:repeat(2,1fr)}
   .steps,.events,.about,.cta{grid-template-columns:1fr}
   .ig{grid-template-columns:repeat(3,1fr)}
+  .about{gap:40px}
   .about .stack{height:420px}
   .section{padding:80px 0}
+  .section-head{margin-bottom:32px}
+  .spot{min-height:460px;border-radius:24px}
+  .spot::before{background:linear-gradient(180deg,rgba(10,20,15,.35),rgba(10,20,15,.85))}
   .spot .in{padding:36px}
-  .cta{padding:44px 30px}
+  .event-feature{min-height:340px}
+  .cta{padding:44px 30px;border-radius:24px}
   .palette{display:none}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .toolbar>*{min-width:0}
+  .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;-webkit-overflow-scrolling:touch}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+  .store-pick{width:100%}
+  .store-pick select{flex:1;min-width:0;width:100%}
+  footer{margin-top:80px;padding-top:60px}
 }
 @media (max-width:560px){
-  .products,.stores{grid-template-columns:1fr}
+  .wrap{width:calc(100% - 32px)}
+  .topbar .wrap{display:block;font-size:12px;line-height:1.45;padding:8px 0}
+  .topbar .dot{display:inline-block;vertical-align:middle;margin-right:6px}
+  .topbar .long{display:none}
+  .nav .wrap{height:66px}
+  .hero{margin-top:-66px}
+  .logo svg{width:40px;height:40px}
+  .logo b{font-size:19px}
+  .logo small{display:none}
   .nav-actions .btn{display:none}
+  .icon-btn{width:40px;height:40px}
+  .hero .wrap{padding:130px 0 70px;gap:28px}
+  .hero h1{font-size:clamp(46px,13vw,64px);margin:16px 0 16px}
+  .hero p.lead{font-size:16px}
+  .hero .ctas{gap:10px}
+  .hero .ctas .btn{flex:1;justify-content:center;white-space:nowrap;padding:14px 16px;font-size:14px}
+  .hud{padding:18px}
+  .hud li{padding:10px 0;font-size:13.5px}
+  .scroll-cue{display:none}
+  .marquee span{font-size:22px;gap:36px}
+  .section{padding:64px 0}
+  .section-head h2{font-size:clamp(36px,10.5vw,48px)}
+  .cats{grid-template-rows:240px 180px 180px;gap:12px}
+  .cat{padding:18px;border-radius:18px}
+  .cat h3{font-size:28px}
+  .cat p{display:none}
+  .cat:first-child p{display:block}
+  .cat .go{width:38px;height:38px;top:14px;right:14px}
+  .cat .num{top:16px;left:18px}
+  .products{grid-template-columns:1fr 1fr;gap:12px}
+  .card{border-radius:16px}
+  .card .ph{aspect-ratio:1}
+  .card .body{padding:12px 12px 14px}
+  .card h4{font-size:13.5px}
+  .card .brand{font-size:9.5px}
+  .card .row{flex-direction:column;align-items:stretch;gap:8px;padding-top:10px}
+  .price{font-size:22px}
+  .wa-btn{justify-content:center;padding:9px 10px}
+  .steps{gap:12px}
+  .step{padding:24px 22px}
+  .step h3{font-size:28px;margin:22px 0 8px}
+  .stores{grid-template-columns:1fr;gap:14px}
+  .store .ph{aspect-ratio:16/10}
+  .spot .in{padding:28px 22px}
+  .spot h2{font-size:clamp(40px,11vw,54px)}
+  .count div{min-width:0;flex:1;padding:12px 8px}
+  .count b{font-size:32px}
+  .spot .btn{width:100%;justify-content:center}
+  .event-feature{min-height:300px;padding:22px}
+  .event-feature h3{font-size:32px}
+  .ev{grid-template-columns:60px 1fr auto;gap:14px;padding:18px 0}
+  .ev .date b{font-size:36px}
+  .ev h4{font-size:16px}
+  .ev .arrow{width:36px;height:36px}
+  .brands div{height:80px;font-size:17px}
+  .about .stack{height:340px}
+  .stats b{font-size:40px}
+  .ig{gap:6px}.ig a{border-radius:10px}
+  .cta{padding:34px 22px}
+  .cta .btns a{font-size:13.5px;padding:13px 18px}
+  .foot{grid-template-columns:1fr 1fr;gap:30px}
+  .foot>div:first-child{grid-column:1/-1}
+  .legal{flex-direction:column}
+  .big-word{font-size:clamp(40px,17vw,230px)}
   .wa-float span{display:none}
-  .wa-float{padding:14px}
-  .foot{grid-template-columns:1fr}
-  .card .row{flex-direction:column;align-items:flex-start}
+  .wa-float{padding:14px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom))}
+}
+@media (max-width:340px){
+  .products{grid-template-columns:1fr}
+  .hero h1{font-size:42px}
 }
 </style>
 </head>
@@ -348,7 +442,7 @@ body.preview .palette,body.preview .wa-float{display:none}
   </symbol>
 </svg>
 
-<div class="topbar"><div class="wrap"><i class="dot"></i> Nueva tienda en <b>Paso Largo Glamping &amp; Golf Club</b>, Miranda · Apertura noviembre 2026 · <a href="#paso-largo">Conócela</a></div></div>
+<div class="topbar"><div class="wrap"><i class="dot"></i> Nueva tienda en <b>Paso Largo<span class="long"> Glamping &amp; Golf Club</span></b><span class="long">, Miranda</span> · Abre en noviembre 2026 · <a href="#paso-largo">Conócela</a></div></div>
 
 <header class="nav" id="nav">
   <div class="wrap">
@@ -366,6 +460,12 @@ body.preview .palette,body.preview .wa-float{display:none}
     </div>
   </div>
 </header>
+
+<div class="mnav" id="mnav" aria-hidden="true">
+  <div class="top"><b>Hoyo en Uno</b><button class="icon-btn" id="mclose" aria-label="Cerrar menú">✕</button></div>
+  <nav aria-label="Menú móvil"><a href="#catalogo">Catálogo</a><a href="#tiendas">Tiendas</a><a href="#torneos">Torneos</a><a href="#nosotros">Nosotros</a><a href="#contacto">Contacto</a></nav>
+  <a class="btn btn-wa" href="#contacto"><svg><use href="#i-wa"/></svg>Escríbenos por WhatsApp</a>
+</div>
 
 <!-- 1. HÉROE -->
 <section class="hero">
@@ -708,6 +808,14 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   io.unobserve(e.target);
 }), {threshold:.12});
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* Menú móvil */
+const mnav = $("#mnav");
+const setMenu = open => { mnav.classList.toggle("open", open); mnav.setAttribute("aria-hidden", !open); document.body.classList.toggle("lock", open); };
+document.querySelector(".burger").addEventListener("click", () => setMenu(true));
+$("#mclose").addEventListener("click", () => setMenu(false));
+mnav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+addEventListener("keydown", e => { if (e.key === "Escape") setMenu(false); });
 
 /* Selector de paleta (solo maqueta) */
 document.querySelectorAll(".palette button").forEach(b => b.addEventListener("click", () => {
